@@ -3,60 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chris Bellis Portfolio</title>
-
-    <link rel="stylesheet" href="/css/layout.css">
-
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,400,600,700,800&amp;display=swap" rel="stylesheet">
-
-    <script src="burger-menu.js"></script>
-    <!-- Load top bar, logo and nav -->
-
-    
+    <title>Document</title>
 </head>
 <body>
 
+    <button id="paper">Paper</button>
+    <button id="rock">Rock</button>
+    <button id="scissors">Scissors</button>
 
-    <div class="header-container" id="header-container"></div>
-            
+    <div id="humanChoiceText"></div>
+    <div id="computerChoiceText"></div>
+    <div id="resultText"></div>
+    <div id="scoreText"></div>
+    <div id="gameResult"></div>
+    <br>
+    <div id="humanTotalScoreText">Human total score: 0</div>
+    <div id="computerTotalScoreText">Computer total score: 0</div>
 
-    <div class="content-container">
+    <button style="display: none;" id="playAgain">Play again?</button>
 
-        <div class="portfolio-container">
-            <div class="pt-item"><a href="/p-pages/topred.html"><img src="images/TopRed/thumbnail2.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/wejo.html"><img src="images/Wejo/thumbnail.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/reading.html"><img src="images/UoR/misc/thumbnail.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/echoic.html"><img src="images/Echoic/echoicThumb.jpg"/></a></div>
-            
-        </div>
+    <script>
 
-        <div class="portfolio-container">
-            <div class="pt-item"><a href="/p-pages/persil.html"><img src="images/Persil/thumbnail.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/buffalo.html"><img src="images/BuffaloMilk/website_cover2.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/mw.html"><img src="images/MW/mwthumb.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/mto.html"><img src="images/MTO/mtothumb.jpg"/></a></div>
-            
-        </div>
+let humanChoiceText = document.getElementById('humanChoiceText');
+let computerChoiceText = document.getElementById('computerChoiceText');
+let roundResultText = document.getElementById('resultText');
+let scoreText = document.getElementById('scoreText');
+let gameResultText = document.getElementById('gameResult');
+let playAgainButton = document.getElementById('playAgain');
+let humanTotalScoreText = document.getElementById('humanTotalScoreText');
+let computerTotalScoreText = document.getElementById('computerTotalScoreText');
 
-        <div class="portfolio-container">
-            <div class="pt-item"><a href="/p-pages/evacool.html"><img src="images/Evacool/evacoolthumb2.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/zum.html"><img src="images/ZUM/zumthumb.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/orbit.html"><img src="images/Orbit/thumbnail.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/trimitive.html"><img src="images/trimitive/thumbnail.jpg"/></a></div>
-            
-        </div>
 
-        <div class="portfolio-container">
-            <div class="pt-item"><a href="/p-pages/elanza.html"><img src="images/Elanza/thumbnail2.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/coke.html"><img src="images/coke/cokevalentines-01.png"/></a></div>
-            <div class="pt-item"><a href="/p-pages/roer.html"><img src="images/Roer/roerThumb2.jpg"/></a></div>
-            <div class="pt-item"><a href="/p-pages/daymark.html"><img src="images/Daymark/daymarkthumb.jpg"/></a></div>
-            
-        </div>
+function computerChoice() {
+    choices = ['rock', 'paper', 'scissors'];
+    let randomIndex = Math.floor(Math.random() * 3);
+    return choices[randomIndex];
+}
 
-    </div>
 
+let computerScore = 0;
+let humanScore = 0;
+let rounds = 0;
+let humanTotalScore = 0;
+let computerTotalScore = 0;
+
+function humanWins(){
+    gameResultText.textContent = "You win the game!";
+    roundResultText.textContent = '';
+    humanTotalScore++;
+}
+
+function computerWins(){
+    gameResultText.textContent = "You lose the game!";
+    roundResultText.textContent = '';
+    computerTotalScore++;
+}
+
+function drawGame(){
+    gameResultText.textContent = "The game is drawed!";
+    roundResultText.textContent = '';
+}
+
+function playRound(humanSelection){
     
+    const computerSelection = computerChoice();
 
+    humanChoiceText.textContent = 'Human choice: ' + humanSelection;
+    computerChoiceText.textContent = 'Computer choice: ' + computerSelection;
+
+    if(humanSelection === computerSelection){
+        roundResultText.textContent = "It's a draw!";
+    } else if(humanSelection === 'rock' && computerSelection === 'scissors'){
+        roundResultText.textContent = 'You win!';
+        humanScore++;
+    } else if(humanSelection === 'rock' && computerSelection === 'paper'){
+        roundResultText.textContent = 'You lose!';
+        computerScore++;
+    } else if(humanSelection === 'paper' && computerSelection === 'rock'){
+        roundResultText.textContent = 'You win!';
+        humanScore++;
+    } else if(humanSelection === 'paper' && computerSelection === 'scissors'){
+        roundResultText.textContent = 'You lose!';
+        computerScore++;
+    } else if(humanSelection === 'scissors' && computerSelection === 'paper'){
+        roundResultText.textContent = 'You win!';
+        humanScore++;
+    } else if(humanSelection === 'scissors' && computerSelection === 'rock'){
+        roundResultText.textContent = 'You lose!';
+        computerScore++;
+    }
+
+    scoreText.textContent = '';
+
+    const computerScoreText = document.createTextNode('Computer score: ' + computerScore);
+    const humanScoreText = document.createTextNode('Human score: ' + humanScore);
+    const lineBreak = document.createElement('br');
+
+    scoreText.appendChild(computerScoreText);
+    scoreText.appendChild(lineBreak);
+    scoreText.appendChild(humanScoreText);
+
+    rounds++;
+
+    if (rounds === 5) {
+        if (humanScore === computerScore){
+                drawGame();
+            } else if (humanScore > computerScore){
+                humanWins();
+            } else if (humanScore < computerScore){ 
+                computerWins();     
+            } else {
+                gameResultText.textContent = '';
+            }
+
+        document.getElementById('paper').style.display = 'none';
+        document.getElementById('rock').style.display = 'none';
+        document.getElementById('scissors').style.display = 'none';
+
+        playAgainButton.style.display = 'block';
+
+        humanTotalScoreText.textContent = 'Human total score: ' + humanTotalScore;
+        computerTotalScoreText.textContent = 'Computer total score: ' + computerTotalScore;
+    }
+
+
+}
+
+function playGame(){
+
+    let paperButton = document.getElementById('paper');
+    let rockButton = document.getElementById('rock');
+    let scissorsButton = document.getElementById('scissors');
+
+    paperButton.addEventListener('click', () => {
+        playRound('paper');
+    });
+
+    rockButton.addEventListener('click', () => {
+        playRound('rock');
+    });
+
+    scissorsButton.addEventListener('click', () =>{
+        playRound('scissors');
+    });
+
+    playAgainButton.addEventListener('click', () => {
+        document.getElementById('paper').style.display = 'inline';
+        document.getElementById('rock').style.display = 'inline';
+        document.getElementById('scissors').style.display = 'inline';
+        playAgainButton.style.display = 'none';
+        humanScore = 0;
+        computerScore = 0;
+        rounds = 0;
+        scoreText.textContent = '';
+        gameResultText.textContent = '';
+    });
+    
+}
+
+playGame();
+
+    </script>
 </body>
 </html>
