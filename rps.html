@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, Paper, Scissors</title>
+    <link rel="stylesheet" href="rpscss.css"></link>
+</head>
+<body>
+
+    <div id="gameContainer">
+        <h1>ROCK, PAPER, SCISSORS</h1>
+        <div class="textBox" id="roundTitle">Round <span id="roundNumberText"></span>...<span id="howManyRounds"></span></div>
+            
+        <div id="roundDetails">
+            <span class="textBox" id="description">Choose your hand...</span>
+            <br>
+
+            <div id="hands">
+                <button id="paper">Paper</button>
+                <button id="rock">Rock</button>
+                <button id="scissors">Scissors</button>
+            </div>
+
+            <div id="humanChoiceText">Your choice: </div>
+            <div id="computerChoiceText">Computer choice: </div>
+            <br>
+            <div>Turn result: <span id="resultText"></span></div>
+            <br>
+            <div id="humanScoreText">Human score: </div>
+            <div id="computerScoreText">Computer score:</div>
+            <br>
+            <div>Round result: <span id="gameResult"></span></div>
+        </div>
+            
+        <div id="gameStats">
+            <div id="humanTotalScoreText">Human total score: 0</div>
+            <div id="computerTotalScoreText">Computer total score: 0</div>
+            <br>
+            <div>Total game result: <span id="totalGameResult"></span></div>
+        </div>
+
+        <button id="playAgain">Next round</button>
+    </div>
+
+    <script>
+
+let humanChoiceText = document.getElementById('humanChoiceText');
+let computerChoiceText = document.getElementById('computerChoiceText');
+let roundResultText = document.getElementById('resultText');
+
+let humanScoreText = document.getElementById('humanScoreText');
+let computerScoreText = document.getElementById('computerScoreText');
+
+let gameResultText = document.getElementById('gameResult');
+let playAgainButton = document.getElementById('playAgain');
+let humanTotalScoreText = document.getElementById('humanTotalScoreText');
+let computerTotalScoreText = document.getElementById('computerTotalScoreText');
+let roundNumberText = document.getElementById('roundNumberText');
+let roundTitle = document.getElementById('roundTitle');
+let howManyRoundsTitle = document.getElementById('howManyRounds');
+let totalGameResult = document.getElementById('totalGameResult');
+
+let paperButton = document.getElementById('paper');
+let rockButton = document.getElementById('rock');
+let scissorsButton = document.getElementById('scissors');
+
+playAgainButton.disabled = true;
+
+function computerChoice() {
+    choices = ['rock', 'paper', 'scissors'];
+    let randomIndex = Math.floor(Math.random() * 3);
+    return choices[randomIndex];
+}
+
+
+let computerScore = 0;
+let humanScore = 0;
+let rounds = 0;
+let totalRounds = 1;
+let humanTotalScore = 0;
+let computerTotalScore = 0;
+
+let roundsLimit = 3;
+
+const numberWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+
+function numberToWord(number) {
+    if (number >= 1 && number <= 10) {
+        return numberWords[number];
+    } 
+}
+
+roundsLimitTitle();
+
+function humanWins(){
+    gameResultText.textContent = "Win!";
+    
+    humanTotalScore++;
+}
+
+function computerWins(){
+    gameResultText.textContent = "Loss!";
+    
+    computerTotalScore++;
+}
+
+function drawGame(){
+    gameResultText.textContent = "Draw!";
+    
+}
+
+function playRound(humanSelection){
+    
+    const computerSelection = computerChoice();
+
+    humanChoiceText.textContent = 'Your choice: ' + humanSelection;
+    computerChoiceText.textContent = 'Computer choice: ' + computerSelection;
+
+    if(humanSelection === computerSelection){
+        roundResultText.textContent = "Draw!";
+    } else if(humanSelection === 'rock' && computerSelection === 'scissors'){
+        roundResultText.textContent = 'Win!';
+        humanScore++;
+    } else if(humanSelection === 'rock' && computerSelection === 'paper'){
+        roundResultText.textContent = 'Lose!';
+        computerScore++;
+    } else if(humanSelection === 'paper' && computerSelection === 'rock'){
+        roundResultText.textContent = 'Win!';
+        humanScore++;
+    } else if(humanSelection === 'paper' && computerSelection === 'scissors'){
+        roundResultText.textContent = 'Lose!';
+        computerScore++;
+    } else if(humanSelection === 'scissors' && computerSelection === 'paper'){
+        roundResultText.textContent = 'Win!';
+        humanScore++;
+    } else if(humanSelection === 'scissors' && computerSelection === 'rock'){
+        roundResultText.textContent = 'Lose!';
+        computerScore++;
+    }
+
+    humanScoreText.textContent = ('Human score: ' + humanScore);
+    computerScoreText.textContent = ('Computer score: ' + computerScore);
+
+    rounds++;
+
+    if (rounds === 5) {
+        if (humanScore === computerScore){
+                drawGame();
+            } else if (humanScore > computerScore){
+                humanWins();
+            } else if (humanScore < computerScore){ 
+                computerWins();     
+            } 
+
+        document.getElementById('paper').disabled = true;
+        document.getElementById('rock').disabled = true;
+        document.getElementById('scissors').disabled = true;
+
+        playAgainButton.disabled = false;
+
+        if (totalRounds == roundsLimit){
+            playAgainButton.disabled = true;
+            roundTitle.textContent = 'Game over! Refresh to play again';
+            totalGameResultScore();
+        } else {
+            playAgainButton.disabled = false;
+        }
+
+        humanTotalScoreText.textContent = 'Human total score: ' + humanTotalScore;
+        computerTotalScoreText.textContent = 'Computer total score: ' + computerTotalScore;
+    }
+
+
+}
+
+function totalGameResultScore() {
+    if (humanTotalScore === computerTotalScore){
+        totalGameResult.textContent = "The game is a draw!"
+    } else if (humanTotalScore < computerTotalScore){
+        totalGameResult.textContent = "Computer wins the game!"
+    } else {
+        totalGameResult.textContent = "You win the game!"
+    }
+}
+
+function playGame(){
+
+    paperButton.addEventListener('click', () => {
+        playRound('paper');
+    });
+
+    rockButton.addEventListener('click', () => {
+        playRound('rock');
+    });
+
+    scissorsButton.addEventListener('click', () =>{
+        playRound('scissors');
+    });
+
+}
+
+// creates the header title saying what round and of how many
+function roundsLimitTitle() {
+    roundNumberText.textContent = numberToWord(totalRounds);
+    howManyRoundsTitle.textContent = ' of ' + numberToWord(roundsLimit) + '!';
+}
+
+playAgainButton.addEventListener('click', () => {
+    paperButton.disabled = false;
+    rockButton.disabled = false;
+    scissorsButton.disabled = false;
+
+    playAgainButton.disabled = true;
+
+    humanScore = 0;
+    computerScore = 0;
+    rounds = 0;
+    totalRounds++;
+    roundResultText.textContent = '';
+    humanScoreText.textContent = 'Human score: ';
+    computerScoreText.textContent = 'Computer score: ';
+    gameResultText.textContent = '';
+    humanChoiceText.textContent = 'Your choice: ';
+    computerChoiceText.textContent = 'Computer choice: ';
+
+    roundsLimitTitle();
+        
+});
+    
+
+playGame();
+
+    </script>
+</body>
+</html>
